@@ -1,10 +1,10 @@
 <template>
-    <div>
+    <div class="sku-auto">
         <el-row>
-            <el-col :span="2">
+            <el-col :span="2" style="width:80px;">
                 <div style="line-height:40px;height:40px;">规格名:</div>
             </el-col>
-            <el-col :span="22">
+            <el-col :span="21">
                 <el-autocomplete
                         :value="state"
                         :fetch-suggestions="querySearchAsync"
@@ -86,6 +86,8 @@
         }
     };
 </script>
-<style lang="scss">
-
+<style scoped>
+    .sku-auto{
+        margin-bottom:10px;
+    }
 </style>

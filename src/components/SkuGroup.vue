@@ -1,14 +1,14 @@
 <template>
-    <div>
-        <el-row class="sku-item">
+    <div  class="sku-item">
+        <el-row>
             <el-col :span="22">
                 <sku-auto-complete :index="index"></sku-auto-complete>
             </el-col>
             <el-col :span="2">
-                <el-button type="danger" icon="el-icon-delete" circle @click="delOneItem(index)"></el-button>
+                <el-button type="danger"  @click="delOneItem(index)">删除</el-button>
             </el-col>
         </el-row>
-        <el-row class="sku-item">
+        <el-row>
             <el-col :span="24">
                 <sku-tags :index="index"></sku-tags>
             </el-col>

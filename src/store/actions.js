@@ -23,6 +23,9 @@ export default {
     delTagsAction({ commit },payload) {
         commit('delTagsAction',payload)
     },
+    updateTagsAction({ commit },payload) {
+        commit('updateTagsAction',payload)
+    },
     updateInputAction({ commit },payload) {
         commit('updateInputAction',payload)
     }

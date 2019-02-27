@@ -11,22 +11,26 @@
             </el-table-column>
             <el-table-column prop="price_original" label="价格" width="150px">
                 <template slot-scope="scope">
-                    <el-input size="small" :value="scope.row.price" class="sku-input" maxlength="6"  type="number" @input="updateInput($event, scope.$index,'price')"></el-input>
+                    <el-input size="small" :value="scope.row.price" class="sku-input" maxlength="6" type="number"
+                              @input="updateInput($event, scope.$index,'price')"></el-input>
                 </template>
             </el-table-column>
             <el-table-column prop="price_original" label="库存" width="150px">
                 <template slot-scope="scope">
-                    <el-input size="small" :value="scope.row.stock" class="sku-input" maxlength="6" type="number" @input="updateInput($event, scope.$index,'stock')"></el-input>
+                    <el-input size="small" :value="scope.row.stock" class="sku-input" maxlength="6" type="number"
+                              @input="updateInput($event, scope.$index,'stock')"></el-input>
                 </template>
             </el-table-column>
             <el-table-column prop="price_original" label="规格编码" width="150px">
                 <template slot-scope="scope">
-                    <el-input size="small" :value="scope.row.code" class="sku-input" maxlength="20" @input="updateInput($event, scope.$index,'code')"></el-input>
+                    <el-input size="small" :value="scope.row.code" class="sku-input" maxlength="20"
+                              @input="updateInput($event, scope.$index,'code')"></el-input>
                 </template>
             </el-table-column>
             <el-table-column prop="price_original" label="成本价" width="150px">
                 <template slot-scope="scope">
-                    <el-input size="small" :value="scope.row.price_original" class="sku-input" maxlength="6" type="number" @input="updateInput($event, scope.$index,'price_original')"></el-input>
+                    <el-input size="small" :value="scope.row.price_original" class="sku-input" maxlength="6"
+                              type="number" @input="updateInput($event, scope.$index,'price_original')"></el-input>
                 </template>
             </el-table-column>
             <el-table-column prop="price_original" label="销量" width="150px">
@@ -39,37 +43,37 @@
 </template>
 
 <script>
-    import {mapState,mapActions} from 'vuex'
+    import {mapState, mapActions} from 'vuex'
     export default {
-        name:'sku-table-cols',
+        name: 'sku-table-cols',
         data(){
             return {
-                localSkuTable:[]
+                localSkuTable: []
             }
         },
-        watch:{
-            skuList:{
-                handler: function(val, oldVal){
+        watch: {
+            skuList: {
+                handler: function (val, oldVal) {
                     this.computedClo(val);
                 },
                 deep: true
             },
-            skucols:{
-                handler: function(val, oldVal){
+            skucols: {
+                handler: function (val, oldVal) {
                     this.computedTableData(this.skuList);
                 },
                 deep: true
             }
         },
-        methods:{
-            updateInput(val,index,key){
-                if(key=='price'||key=='stock'||key=='price_original'){
-                    if(Number(val)<0){
+        methods: {
+            updateInput(val, index, key){
+                if (key == 'price' || key == 'stock' || key == 'price_original') {
+                    if (Number(val) < 0) {
                         alert('该数值不能小于零');
                         return;
                     }
                 }
-                this.updateInputAction({val,index,key});
+                this.updateInputAction({val, index, key});
             },
             //笛卡尔积算法
             descartes(list) {
@@ -120,42 +124,50 @@
                 }
             },
             computedClo(data){
-                let localData=[];
-                data.forEach((item,index)=>{
-                    let keyname='k'+index
+                let localData = [];
+                data.forEach((item, index)=> {
+                    let keyname = 'k' + index
                     localData.push({
-                        label:item.type,
-                        value:keyname
+                        label: item.type,
+                        value: keyname
                     })
                 });
                 this.updateSkucolsAction(localData);
             },
             computedTableData(data){
-                let localData=[];
-                let tableData=[];
-                data.forEach((item,index)=>{
-                    localData.push(item.data);
+                let localData = [];
+                let tableData = [];
+                let passData = data;
+                let attr = [];
+                data.forEach((item, index)=> {
+                    attr = [];
+                    item.data.forEach((v)=> {
+                        if (v.text !== '') {
+                            attr.push(v.text)
+                        }
+                    });
+                    localData.push(attr);
                 });
-                let descartesData=this.descartes(localData);
+                let descartesData = this.descartes(localData);
                 for (let i = 0; i < descartesData.length; i++) {
-                    var sku={
-                        price:'',
-                        stock:'',
-                        code:'',
-                        price_original:'',
-                        sale:0
+                    var sku = {
+                        price: '',
+                        stock: '',
+                        code: '',
+                        price_original: '',
+                        sale: 0
                     }
                     for (let j = 0; j < descartesData[i].length; j++) {
-                        if(descartesData[i][j]){
+                        if (descartesData[i][j]) {
                             sku[`k${j}`] = descartesData[i][j];
-                        }else{
+                        } else {
                             sku[`k${j}`] = '';
                         }
 
                     }
                     tableData.push(sku)
                 }
-                this.localSkuTable=tableData;
+                this.localSkuTable = tableData;
                 this.updateTableDataAction(tableData);
             },
             ...mapActions([
@@ -164,23 +176,23 @@
                 'updateInputAction'
             ])
         },
-        computed:mapState({
+        computed: mapState({
             skuList: state => state.skuList,
             skuTable: state => state.skuTable,
-            skucols:state => state.skucols,
+            skucols: state => state.skucols,
         }),
         mounted(){
-             this.computedClo(this.skuList);
-             this.computedTableData(this.skuList);
-             this.localSkuTable=this.skuTable;
+            this.computedClo(this.skuList);
+            this.computedTableData(this.skuList);
+            this.localSkuTable = this.skuTable;
         }
     }
 
 
 </script>
 <style scoped>
-    .sku-table{
-        margin-top:20px;
-        padding:10px;
+    .sku-table {
+        margin-top: 20px;
+        padding: 10px;
     }
 </style>

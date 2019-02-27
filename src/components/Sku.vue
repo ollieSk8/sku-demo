@@ -8,7 +8,7 @@
             </div>
             <div class="pannel">
                 <el-row class="sku-item">
-                    <el-col :span="24"><el-button @click="addOneSku">添加规格</el-button></el-col>
+                    <el-col :span="24"><el-button @click="addOneSku" type="primary">添加规格</el-button></el-col>
                 </el-row>
             </div>
             <sku-table-cols v-if="canTableShow"></sku-table-cols>

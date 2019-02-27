@@ -1,27 +1,25 @@
 <template>
     <div id="app">
+        <!--<form @submit.prevent="validateBeforeSubmit">-->
+            <!--<el-input v-model="product_name" name="product_name" v-validate="'required|alpha'" placeholder="app里的表单域"/>-->
+            <!--<div v-if="errors.has('product_name')">-->
+                <!--{{ errors.first('product_name') }}-->
+            <!--</div>-->
+            <!--<el-input v-model="text" name="text" v-validate="'required|alpha'" placeholder="app里的表单域"/>-->
+            <!--<div v-if="errors.has('text')">-->
+                <!--{{ errors.first('text') }}-->
+            <!--</div>-->
+            <!--<text-com></text-com>-->
+            <!--<el-button type="primary" native-type="submit">Submit</el-button>-->
+        <!--</form>-->
 
-        <form @submit.prevent="validateBeforeSubmit">
-            <el-input v-model="product_name" name="product_name" v-validate="'required|alpha'" placeholder="app里的表单域"/>
-            <div v-if="errors.has('product_name')">
-                {{ errors.first('product_name') }}
-            </div>
-            <el-input v-model="text" name="text" v-validate="'required|alpha'" placeholder="app里的表单域"/>
-            <div v-if="errors.has('text')">
-                {{ errors.first('text') }}
-            </div>
-            <text-com></text-com>
-            <el-button type="primary" native-type="submit">Submit</el-button>
-        </form>
-
-        <!--<sku></sku>-->
+        <sku></sku>
     </div>
 </template>
 
 <script>
 import store from './store'
-import Text from './components/Text.vue'
-//import Sku from './components/Sku.vue';
+import Sku from './components/Sku.vue';
 export default {
     name: 'app',
     store,
@@ -32,7 +30,7 @@ export default {
         }
     },
     components: {
-        'text-com': Text
+        'sku': Sku
     },
     provide() {
         return {
