@@ -20,8 +20,8 @@
 
 <script>
 import store from './store'
-import Text from './components/Text.vue'
-//import Sku from './components/Sku.vue';
+//import Text from './components/Text.vue'
+import Sku from './components/Sku.vue';
 export default {
   name: 'app',
   store,
