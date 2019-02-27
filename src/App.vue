@@ -1,17 +1,55 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+
+    <!--<form @submit.prevent="validateBeforeSubmit">-->
+      <!--<el-input v-model="product_name" name="product_name"  v-validate="'required|alpha'" placeholder="app里的表单域"/>-->
+      <!--<div v-if="errors.has('product_name')">-->
+        <!--{{ errors.first('product_name') }}-->
+      <!--</div>-->
+      <!--<el-input v-model="product_name" name="text"  v-validate="'required|alpha'" placeholder="app里的表单域"/>-->
+      <!--<div v-if="errors.has('text')">-->
+        <!--{{ errors.first('text') }}-->
+      <!--</div>-->
+      <!--<text-com></text-com>-->
+      <!--<el-button type="primary" native-type="submit">Submit</el-button>-->
+    <!--</form>-->
+
+    <sku></sku>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import store from './store'
+//import Text from './components/Text.vue'
+import Sku from './components/Sku.vue';
 export default {
   name: 'app',
-  components: {
-    HelloWorld
+  store,
+  data () {
+    return {
+      product_name:'',
+      text:''
+    }
+  },
+//  components:{
+//    'text-com':Text
+//  },
+  components:{
+    'sku':Sku,
+  },
+  methods:{
+    validateBeforeSubmit() {
+      this.$children.$validator.validateAll();
+      this.$validator.validateAll().then((result) => {
+        if (result) {
+          // eslint-disable-next-line
+          alert('Form Submitted!');
+          return;
+        }
+
+        //alert('Correct them errors!');
+      });
+    }
   }
 }
 </script>
@@ -21,8 +59,18 @@ export default {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  padding:20px;
+}
+.container{
+  wdith:800px;
+  margin:0 auto;
+}
+.pannel{
+  padding:10px;
+  margin-bottom:10px;
+}
+.sku-item{
+  padding:10px;background-color:#f8f8f8;
 }
 </style>
