@@ -9,6 +9,7 @@
 <script>
     export default {
         name:'text-child',
+        inject: ['$validator'],
         data(){
             return {
                 email:''

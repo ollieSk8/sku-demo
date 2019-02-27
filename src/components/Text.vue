@@ -1,8 +1,8 @@
 <template>
     <div>
-        <el-input  v-validate="'required|email'" name="email" type="text" v-model="email" placeholder="text-com"/>
-        <div v-if="errors.has('email')">
-            {{ errors.first('email') }}
+        <el-input  v-validate="'required|email'" name="email1" type="text" v-model="email1" placeholder="text-com"/>
+        <div v-if="errors.has('email1')">
+            {{ errors.first('email1') }}
         </div>
         <text-child></text-child>
     </div>
@@ -11,12 +11,18 @@
     import TextChild from './TextChild.vue'
     export default {
         name:'text-com',
+        provide() {
+            return {
+                $validator: this.$validator,
+            };
+        },
+        inject: ['$validator'],
         components:{
             'text-child':TextChild
         },
         data(){
             return {
-                email:''
+                email1:''
             }
         }
     };
