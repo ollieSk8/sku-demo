@@ -1,4 +1,4 @@
-# table-demo
+# sku-demo
 
 ## Project setup
 ```
