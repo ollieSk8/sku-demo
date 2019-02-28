@@ -14,13 +14,18 @@ export default {
     updateMessageAction(state,payload) {
         let {index,value}=payload;
         state.skuList[index].type=value;
+        state.skuList[index].data=[];
         state.skuList[index].data.push({text:''});
     },
     updateTableDataAction(state,payload) {
-        state.skuTable=payload;
-    },
-    updateSkucolsAction(state,payload){
-        state.skucols=payload;
+        //console.log(JSON.stringify(payload))
+        let oldData=state.skuTable;
+        let newData=payload;
+        let resData=[]
+        for(let i=0;i<newData.length;i++){
+            resData.push(Object.assign({},newData[i],oldData[i]));
+        }
+        state.skuTable=resData;
     },
     addTagsAction(state,payload){
         let {index}=payload;

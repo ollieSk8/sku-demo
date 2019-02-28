@@ -1,24 +1,55 @@
 <template>
     <div class="sku-table">
         <el-table
-                v-bind:data="localSkuTable"
+                v-bind:data="skuTable"
         >
             <el-table-column
-                    v-for="(col,index) in skucols" :key="index"
+                    v-for="(col,index) in attrAttribute" :key="index"
                     :prop="col.value"
                     :label="col.label"
             >
             </el-table-column>
             <el-table-column prop="price_original" label="价格" width="150px">
                 <template slot-scope="scope">
-                    <el-input size="small" :value="scope.row.price" class="sku-input" maxlength="6" type="number"
-                              @input="updateInput($event, scope.$index,'price')"></el-input>
+                   <div class="abc">
+                       <el-input
+                               size="small"
+                               :value="scope.row.price"
+                               class="sku-input"
+                               maxlength="6"
+                               type="number"
+                               v-validate="'required'"
+                               :name="'price'+scope.$index"
+                               @input="updateInput($event, scope.$index,'price')"
+                               data-vv-as="价格"
+                       >
+                       </el-input>
+                       <div v-show="errors.has('price'+scope.$index)" class="errors1">
+                           {{ errors.first('price'+scope.$index) }}
+                       </div>
+                   </div>
                 </template>
             </el-table-column>
             <el-table-column prop="price_original" label="库存" width="150px">
                 <template slot-scope="scope">
-                    <el-input size="small" :value="scope.row.stock" class="sku-input" maxlength="6" type="number"
-                              @input="updateInput($event, scope.$index,'stock')"></el-input>
+                    <div class="abc">
+                        <el-input
+                                size="small"
+                                :value="scope.row.stock"
+                                class="sku-input"
+                                maxlength="6"
+                                type="number"
+                                @input="updateInput($event, scope.$index,'stock')"
+                                v-validate="'required'"
+                                :name="'stock'+scope.$index"
+                                data-vv-as="库存"
+                        >
+
+                        </el-input>
+                        <div v-show="errors.has('stock'+scope.$index)" class="errors2">
+                            {{ errors.first('stock'+scope.$index) }}
+                        </div>
+                    </div>
                 </template>
             </el-table-column>
             <el-table-column prop="price_original" label="规格编码" width="150px">
@@ -44,23 +75,20 @@
 
 <script>
     import {mapState, mapActions} from 'vuex'
+    import zhCN from 'vee-validate/dist/locale/zh_CN'
     export default {
         name: 'sku-table-cols',
         data(){
             return {
-                localSkuTable: []
+                attrAttribute:[]
             }
         },
         watch: {
             skuList: {
                 handler: function (val, oldVal) {
-                    this.computedClo(val);
-                },
-                deep: true
-            },
-            skucols: {
-                handler: function (val, oldVal) {
-                    this.computedTableData(this.skuList);
+                    console.log('skuList change')
+                    console.log(JSON.stringify(this.skuList));
+                    //this.computedTableData(this.skuList);
                 },
                 deep: true
             }
@@ -69,7 +97,17 @@
             updateInput(val, index, key){
                 if (key == 'price' || key == 'stock' || key == 'price_original') {
                     if (Number(val) < 0) {
-                        alert('该数值不能小于零');
+                        let messgage='';
+
+                        switch(key){
+                            case 'price':
+                                messgage='价格';
+                            case 'stock':
+                                messgage='库存';
+                            case 'price_original':
+                                messgage='成本价';
+                        }
+                        this.$message.error(`${messgage}必须大于0`);
                         return;
                     }
                 }
@@ -123,25 +161,25 @@
                     }
                 }
             },
-            computedClo(data){
-                let localData = [];
-                data.forEach((item, index)=> {
-                    let keyname = 'k' + index
-                    localData.push({
-                        label: item.type,
-                        value: keyname
-                    })
-                });
-                this.updateSkucolsAction(localData);
-            },
-            computedTableData(data){
+            computedTableData(skuList){
+                /*
+                    skuList 数据结构
+                     [{"type":"颜色","data":[{"text":"黄"},{"text":"绿"}]},{"type":"版本","data":[{"text":"公开版"},{"text":"非公开"}]}]
+
+                     localData 数据结构
+                     [["黄","绿"],["公开版","非公开版"]]
+
+                     attrAttribute 数据结构
+
+                     [{label:"颜色",value:"黄"},{label:"",value:"绿"},{label:"颜色",value:"绿"}]
+                 */
                 let localData = [];
                 let tableData = [];
                 let passData = data;
-                let attr = [];
-                data.forEach((item, index)=> {
+                let tmpAttr = [];
+                skuList.forEach((item, index)=> {
                     attr = [];
-                    item.data.forEach((v)=> {
+                    tmpAttr.data.forEach((v)=> {
                         if (v.text !== '') {
                             attr.push(v.text)
                         }
@@ -167,24 +205,23 @@
                     }
                     tableData.push(sku)
                 }
-                this.localSkuTable = tableData;
+                this.$validator.reset();
                 this.updateTableDataAction(tableData);
             },
             ...mapActions([
                 'updateTableDataAction',
-                'updateSkucolsAction',
                 'updateInputAction'
             ])
         },
         computed: mapState({
             skuList: state => state.skuList,
-            skuTable: state => state.skuTable,
-            skucols: state => state.skucols,
+            skuTable: state => state.skuTable
         }),
-        mounted(){
-            this.computedClo(this.skuList);
-            this.computedTableData(this.skuList);
-            this.localSkuTable = this.skuTable;
+        created(){
+            this.$validator.localize('cn', {
+                messages: zhCN.messages
+            });
+            this.$validator.localize('cn');
         }
     }
 
@@ -194,5 +231,11 @@
     .sku-table {
         margin-top: 20px;
         padding: 10px;
+    }
+    .errors1{
+        color:#f56c6c;
+    }
+    .errors2{
+        color:#f56c6c;
     }
 </style>

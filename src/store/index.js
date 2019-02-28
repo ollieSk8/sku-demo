@@ -12,7 +12,6 @@ export default new Vuex.Store({
     strict: debug,
     state:{
         skuList:[],
-        skucols:[],
         skuTable:[]
     },
     getters,

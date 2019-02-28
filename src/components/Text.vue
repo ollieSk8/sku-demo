@@ -9,6 +9,8 @@
 </template>
 <script>
     import TextChild from './TextChild.vue'
+
+
     export default {
         name:'text-com',
         provide() {

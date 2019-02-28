@@ -23,7 +23,7 @@ Validator.extend('picked', {
             data
         }
     },
-    getMessage (field, params) {
+    getMessage (field, params, value) {
         const [min, max] = params
         return params.length === 1
             ? `The {field} field requires at least ${min} item${min > 1 ? 's' : ''}`

@@ -10,13 +10,20 @@
                         :fetch-suggestions="querySearchAsync"
                         placeholder="请输入内容"
                         @input="updateInput($event)"
+                        v-validate="'required'"
+                        :name="'key'+index"
+                        data-vv-as="规格名"
                 ></el-autocomplete>
+                <div v-if="errors.has('key'+index)" class="errors">
+                    {{ errors.first('key'+index) }}
+                </div>
             </el-col>
         </el-row>
     </div>
 </template>
 <script>
     import {mapActions} from 'vuex'
+    import zhCN from 'vee-validate/dist/locale/zh_CN'
     export default {
         name:'sku-auto-complete',
         data() {
@@ -83,11 +90,22 @@
         },
         mounted() {
             this.restaurants = this.loadAll();
+        },
+        created(){
+            this.$validator.localize('cn', {
+                messages: zhCN.messages
+            });
+
+            // start with english locale.
+            this.$validator.localize('cn');
         }
     };
 </script>
 <style scoped>
     .sku-auto{
-        margin-bottom:10px;
+        margin-bottom:20px;
+    }
+    .errors{
+        color:#f56c6c;
     }
 </style>

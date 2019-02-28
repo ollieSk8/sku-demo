@@ -14,9 +14,6 @@ export default {
     updateTableDataAction({ commit },payload) {
         commit('updateTableDataAction',payload)
     },
-    updateSkucolsAction({ commit },payload) {
-        commit('updateSkucolsAction',payload)
-    },
     addTagsAction({ commit },payload) {
         commit('addTagsAction',payload)
     },
