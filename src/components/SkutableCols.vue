@@ -30,6 +30,11 @@
                    </div>
                 </template>
             </el-table-column>
+            <el-table-column prop="price_original" label="" width="10px">
+                <template slot-scope="scope">
+                    <div></div>
+                </template>
+            </el-table-column>
             <el-table-column prop="price_original" label="库存" width="150px">
                 <template slot-scope="scope">
                     <div class="abc">
@@ -87,8 +92,7 @@
             skuList: {
                 handler: function (val, oldVal) {
                     console.log('skuList change')
-                    console.log(JSON.stringify(this.skuList));
-                    //this.computedTableData(this.skuList);
+                   this.computedTableData(this.$store.state.skuList);
                 },
                 deep: true
             }
@@ -163,29 +167,39 @@
             },
             computedTableData(skuList){
                 /*
-                    skuList 数据结构
+                     1 skuList 数据结构
                      [{"type":"颜色","data":[{"text":"黄"},{"text":"绿"}]},{"type":"版本","data":[{"text":"公开版"},{"text":"非公开"}]}]
 
-                     localData 数据结构
+                     2 localData 数据结构
                      [["黄","绿"],["公开版","非公开版"]]
 
-                     attrAttribute 数据结构
+                     3 attrAttribute 数据结构
 
-                     [{label:"颜色",value:"黄"},{label:"",value:"绿"},{label:"颜色",value:"绿"}]
+                     [{label:"颜色",value:"k0"},{label:"版本",value:"k1"},{label:"颜色",value:"绿"}]
                  */
                 let localData = [];
-                let tableData = [];
-                let passData = data;
-                let tmpAttr = [];
-                skuList.forEach((item, index)=> {
-                    attr = [];
-                    tmpAttr.data.forEach((v)=> {
-                        if (v.text !== '') {
-                            attr.push(v.text)
+                let attrAttribute = [];
+                let tableData=[];
+                this.skuList.forEach((item, index)=> {
+                    if (item.type !== '') {
+                        let tmp = [];
+                        item.data.forEach((v, k)=> {
+                            if (v.text !== '') {
+                                tmp.push(v.text);
+                            }
+                        });
+                        if (tmp.length !== 0) {
+                            attrAttribute.push({
+                                label: item.type,
+                                value: `k${index}`
+                            });
+                            localData.push(tmp);
                         }
-                    });
-                    localData.push(attr);
+                    }
                 });
+
+                this.attrAttribute = attrAttribute;
+
                 let descartesData = this.descartes(localData);
                 for (let i = 0; i < descartesData.length; i++) {
                     var sku = {
@@ -205,8 +219,14 @@
                     }
                     tableData.push(sku)
                 }
+
+                let oldData=this.$store.state.skuTable;//取出旧值
+
                 this.$validator.reset();
-                this.updateTableDataAction(tableData);
+                this.updateTableDataAction({
+                    newData:tableData,
+                    oldData:oldData
+                });
             },
             ...mapActions([
                 'updateTableDataAction',
