@@ -90,7 +90,6 @@
         watch: {
             skuList: {
                 handler: function (val, oldVal) {
-                    console.log('skuList change')
                    this.computedTableData(this.$store.state.skuList);
                 },
                 deep: true

@@ -9,9 +9,10 @@
                         :value="state"
                         :fetch-suggestions="querySearchAsync"
                         placeholder="请输入内容"
-                        @input="updateInput($event)"
+                        type="text"
                         v-validate="'required'"
                         :name="'key'+index"
+                        @input="updateInput($event)"
                         data-vv-as="规格名"
                 ></el-autocomplete>
                 <div v-if="errors.has('key'+index)" class="errors">
@@ -23,6 +24,7 @@
 </template>
 <script>
     import {mapActions} from 'vuex'
+    import bus from './bus';
     export default {
         name:'sku-auto-complete',
         data() {
@@ -91,6 +93,9 @@
         },
         mounted() {
             this.restaurants = this.loadAll();
+            bus.$on('veeValidate', () => {
+                this.$validator.validateAll();
+            });
         }
     };
 </script>

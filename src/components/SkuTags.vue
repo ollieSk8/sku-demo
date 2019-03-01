@@ -12,7 +12,7 @@
                                    placeholder="请输入内容"
                                    :value="skuValue.text"
                                    @input="updateInput($event,tagIndex)"
-                                   autofoucs
+                                   type="text"
                                    v-validate="'required'"
                                    :name="'val'+index+tagIndex"
                                    data-vv-as="规格值"
@@ -35,6 +35,7 @@
 </template>
 <script>
     import {mapActions} from 'vuex'
+    import bus from './bus';
     export default {
         name:'sku-tags',
         data(){
@@ -95,6 +96,9 @@
         },
         mounted(){
             this.skuValueLocalList=this.skuValueList;
+            bus.$on('veeValidate', () => {
+                this.$validator.validateAll();
+            });
         }
     }
 </script>

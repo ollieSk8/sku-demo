@@ -31,6 +31,7 @@
 import store from './store'
 import Sku from './components/Sku.vue';
 import zhCN from 'vee-validate/dist/locale/zh_CN'
+import bus from './components/bus';
 export default {
     name: 'app',
     store,
@@ -56,10 +57,14 @@ export default {
     },
     methods: {
         validateBeforeSubmit() {
+            bus.$emit('veeValidate');
             this.$validator.validateAll().then((result) => {
                 if (result) {
-                    // eslint-disable-next-line
-                    alert('Form Submitted!');
+                    if (this.errors.items.length<=0) {
+                        // eslint-disable-next-line
+                        alert('Form Submitted!');
+                    }
+
                     return;
                 }
             });
