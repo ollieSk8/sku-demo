@@ -14,14 +14,14 @@
                                    @input="updateInput($event,tagIndex)"
                                    autofoucs
                                    v-validate="'required'"
-                                   :name="'val'+tagIndex"
+                                   :name="'val'+index+tagIndex"
                                    data-vv-as="规格值"
                            >
 
                            </el-input>
                            <div class="delete-btn" @click="delOneTag(tagIndex)">X</div>
-                           <div v-if="errors.has('val'+tagIndex)" class="errors">
-                               {{ errors.first('val'+tagIndex) }}
+                           <div v-if="errors.has('val'+index+tagIndex)" class="errors">
+                               {{ errors.first('val'+index+tagIndex) }}
                            </div>
                        </div>
                    </div>
@@ -35,9 +35,13 @@
 </template>
 <script>
     import {mapActions} from 'vuex'
-    import zhCN from 'vee-validate/dist/locale/zh_CN'
     export default {
         name:'sku-tags',
+        data(){
+            return {
+                text:this.text
+            }
+        },
         computed: {
             skuValueList(){
                 return this.$store.state.skuList[this.index].data
@@ -46,6 +50,7 @@
                 return this.$store.state.skuList[this.index].data.length;
             }
         },
+        inject: ['$validator'],
         methods:{
             addTags(){
                 this.addTagsAction({index:this.index});
@@ -90,14 +95,6 @@
         },
         mounted(){
             this.skuValueLocalList=this.skuValueList;
-        },
-        created(){
-            this.$validator.localize('cn', {
-                messages: zhCN.messages
-            });
-
-            // start with english locale.
-            this.$validator.localize('cn');
         }
     }
 </script>

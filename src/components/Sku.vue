@@ -1,18 +1,16 @@
 <template>
-    <div>
-        <div class="container">
-            <div v-if="datas.length>0">
-                <div class="pannel" v-for="(data,index) in datas" :key="index">
-                    <sku-group :index="index"></sku-group>
-                </div>
+    <div class="container">
+        <div v-if="datas.length>0">
+            <div class="pannel" v-for="(data,index) in datas" :key="index">
+                <sku-group :index="index"></sku-group>
             </div>
-            <div class="pannel">
-                <el-row class="sku-item">
-                    <el-col :span="24"><el-button @click="addOneSku" type="primary">添加规格</el-button></el-col>
-                </el-row>
-            </div>
-            <sku-table-cols v-if="canTableShow"></sku-table-cols>
         </div>
+        <div class="pannel">
+            <el-row class="sku-item">
+                <el-col :span="24"><el-button @click="addOneSku" type="primary">添加规格</el-button></el-col>
+            </el-row>
+        </div>
+        <sku-table-cols v-if="canTableShow"></sku-table-cols>
     </div>
 </template>
 <script>
@@ -32,6 +30,7 @@
                 canTableShow:false
             }
         },
+        inject: ['$validator'],
         computed:mapState({
             skuList: state => state.skuList,
             skuTable: state => state.skuTable

@@ -21,6 +21,11 @@
     import SkuTags from './SkuTags.vue'
     export default {
         name: 'sku-group',
+        data(){
+            return {
+                test:'',
+            }
+        },
         props: {
             index: {
                 type: Number,
@@ -28,6 +33,7 @@
                 default: 0
             },
         },
+        inject: ['$validator'],
         components:{
             'sku-auto-complete':SkuAutoComplete,
             'sku-tags':SkuTags

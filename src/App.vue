@@ -1,25 +1,36 @@
 <template>
     <div id="app">
-        <!--<form @submit.prevent="validateBeforeSubmit">-->
-            <!--<el-input v-model="product_name" name="product_name" v-validate="'required|alpha'" placeholder="app里的表单域"/>-->
-            <!--<div v-if="errors.has('product_name')">-->
-                <!--{{ errors.first('product_name') }}-->
-            <!--</div>-->
-            <!--<el-input v-model="text" name="text" v-validate="'required|alpha'" placeholder="app里的表单域"/>-->
-            <!--<div v-if="errors.has('text')">-->
-                <!--{{ errors.first('text') }}-->
-            <!--</div>-->
-            <!--<text-com></text-com>-->
-            <!--<el-button type="primary" native-type="submit">Submit</el-button>-->
-        <!--</form>-->
-
-        <sku></sku>
+        <div class="el-form">
+            <form  @submit.prevent="validateBeforeSubmit">
+                <div class="el-form-item">
+                    <div class="el-form-item__label" style="width:80px;">商品名称</div>
+                    <div class="el-form-item__content" style="margin-left: 80px;">
+                        <el-input type="text" v-model="product_name" autocomplete="off" v-validate="'required'" name="product_name" data-vv-as="商品名称"></el-input>
+                        <div v-if="errors.has('product_name')" class="errors">
+                            {{ errors.first('product_name') }}
+                        </div>
+                    </div>
+                </div>
+                <div class="el-form-item">
+                    <div class="el-form-item__label" style="width:80px;">商品规格</div>
+                    <div class="el-form-item__content" style="margin-left: 80px;">
+                        <sku></sku>
+                    </div>
+                </div>
+                <div class="el-form-item">
+                    <div class="el-form-item__label" style="width:80px;"></div>
+                    <div class="el-form-item__content" style="margin-left: 80px;">
+                        <button type="submit" class="el-button el-button--primary"><span>提交</span></button>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
 </template>
-
 <script>
 import store from './store'
 import Sku from './components/Sku.vue';
+import zhCN from 'vee-validate/dist/locale/zh_CN'
 export default {
     name: 'app',
     store,
@@ -34,8 +45,14 @@ export default {
     },
     provide() {
         return {
-            $validator: this.$validator,
+            $validator: this.$validator
         };
+    },
+    created(){
+        this.$validator.localize('cn', {
+            messages: zhCN.messages
+        });
+        this.$validator.localize('cn');
     },
     methods: {
         validateBeforeSubmit() {
@@ -50,7 +67,6 @@ export default {
     }
 }
 </script>
-
 <style>
     #app {
         font-family: 'Avenir', Helvetica, Arial, sans-serif;
@@ -61,7 +77,6 @@ export default {
     }
 
     .container {
-        wdith: 800px;
         margin: 0 auto;
     }
 
@@ -73,5 +88,8 @@ export default {
     .sku-item {
         padding: 10px;
         background-color: #f8f8f8;
+    }
+    .errors {
+        color:#f56c6c;
     }
 </style>

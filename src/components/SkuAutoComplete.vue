@@ -23,11 +23,11 @@
 </template>
 <script>
     import {mapActions} from 'vuex'
-    import zhCN from 'vee-validate/dist/locale/zh_CN'
     export default {
         name:'sku-auto-complete',
         data() {
             return {
+                text:this.text,
                 restaurants: [],
                 timeout:  null
             };
@@ -39,6 +39,7 @@
                 default: 0
             },
         },
+        inject: ['$validator'],
         computed: {
             state(){
                 return this.$store.state.skuList[this.index].type
@@ -90,14 +91,6 @@
         },
         mounted() {
             this.restaurants = this.loadAll();
-        },
-        created(){
-            this.$validator.localize('cn', {
-                messages: zhCN.messages
-            });
-
-            // start with english locale.
-            this.$validator.localize('cn');
         }
     };
 </script>

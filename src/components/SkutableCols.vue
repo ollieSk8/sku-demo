@@ -80,7 +80,6 @@
 
 <script>
     import {mapState, mapActions} from 'vuex'
-    import zhCN from 'vee-validate/dist/locale/zh_CN'
     export default {
         name: 'sku-table-cols',
         data(){
@@ -97,6 +96,7 @@
                 deep: true
             }
         },
+        inject: ['$validator'],
         methods: {
             updateInput(val, index, key){
                 if (key == 'price' || key == 'stock' || key == 'price_original') {
@@ -222,7 +222,6 @@
 
                 let oldData=this.$store.state.skuTable;//取出旧值
 
-                this.$validator.reset();
                 this.updateTableDataAction({
                     newData:tableData,
                     oldData:oldData
@@ -236,13 +235,7 @@
         computed: mapState({
             skuList: state => state.skuList,
             skuTable: state => state.skuTable
-        }),
-        created(){
-            this.$validator.localize('cn', {
-                messages: zhCN.messages
-            });
-            this.$validator.localize('cn');
-        }
+        })
     }
 
 
