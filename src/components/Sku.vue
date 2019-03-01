@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <div v-if="datas.length>0">
+        <div>
             <div class="pannel" v-for="(data,index) in datas" :key="index">
                 <sku-group :index="index"></sku-group>
             </div>
